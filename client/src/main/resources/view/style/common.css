@@ -1,0 +1,37 @@
+.root-pane {
+    -fx-background-color: #222;
+}
+
+.username-field-pane, .password-field-pane {
+    -fx-background-color: #191919;
+}
+
+.username-field, .password-field {
+    -fx-background-color: rgba(25, 25, 25, 0);
+    -fx-prompt-text-fill: #AAA;
+    -fx-text-fill: #EEE;
+    -fx-highlight-fill: #C93636;
+}
+
+.primary-btn {
+    -fx-background-color: #C93636;
+    -fx-text-fill: #BBB;
+}
+
+.secondary-btn {
+    -fx-background-color: #151515;
+    -fx-text-fill: #BBB;
+}
+
+.btn:hover {
+    -fx-background-color: #FFF;
+    -fx-text-fill: #000;
+}
+
+.close-btn {
+    -fx-background-color: #C93636;
+}
+
+.close-btn:hover {
+    -fx-background-color: red;
+}
