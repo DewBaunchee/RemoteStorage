@@ -15,15 +15,10 @@ public enum AlertMessage {
         this.alertType = alertType;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public Alert.AlertType getAlertType() {
-        return alertType;
+    public void showAndWait() {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

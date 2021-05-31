@@ -1,5 +1,8 @@
 package by.vorivoda.matvey.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class GlobalConstants {
     // Security
     public static final String USERNAME_SYMBOLS_REGEX = "[A-Za-z0-9_]*";
@@ -17,4 +20,29 @@ public class GlobalConstants {
 
     // STORAGE
     public static final String STORAGES_LOCATION = "/storages";
+
+    // WEB
+    public static final Map<String, String> CONTENT_TYPES = new HashMap<>(){{
+        put("txt", "text/plain");
+        put("css", "text/css");
+        put("html", "text/html");
+        put("js", "text/javascript");
+        put("ts", "text/javascript");
+        put("php", "text/php");
+        put("xml", "text/xml");
+
+        put("ogg", "video/ogg");
+        put("mp4", "video/mp4");
+
+        put("png", "image/png");
+        put("jpeg", "image/jpeg");
+        put("gif", "image/gif");
+
+        put("mp3", "audio/mpeg");
+
+        put("zip", "application/zip");
+        put("pdf", "application/pdf");
+    }};
+
+    public static final String DEFAULT_CONTENT_TYPE = "text/plain";
 }

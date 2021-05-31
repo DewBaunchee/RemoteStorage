@@ -6,8 +6,6 @@ public enum ApplicationScene {
     STORAGE_MANAGER("/view/fxml/storageManager.fxml");
 
     private final String path;
-    private final int width = 0;
-    private final int height = 0;
 
     ApplicationScene(String path) {
         this.path = path;

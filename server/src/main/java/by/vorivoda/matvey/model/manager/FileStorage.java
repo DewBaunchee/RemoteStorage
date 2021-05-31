@@ -252,6 +252,13 @@ public class FileStorage {
         FileStorage.contextPath = contextPath;
     }
 
+    public static String getFileExtension(String path) {
+        int dotIndex = path.lastIndexOf(".");
+        int slashIndex = path.lastIndexOf("/");
+
+        return dotIndex > slashIndex ? path.substring(dotIndex + 1) : "";
+    }
+
     public void setRoot(String root) {
         root = (contextPath + GlobalConstants.STORAGES_LOCATION + root)
                 .replace('\\', '/').replace("//", "/");

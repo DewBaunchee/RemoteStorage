@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>by.vorivoda.matvey</groupId>
-    <artifactId>server</artifactId>
+    <artifactId>remote-storage-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>server</name>
-    <description>Demo project for Spring Boot</description>
+    <name>Remote Storage Server</name>
+    <description>Remote storage on Spring</description>
     <properties>
         <java.version>16</java.version>
     </properties>
@@ -79,6 +79,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.5.0</version>
             </plugin>
         </plugins>
     </build>

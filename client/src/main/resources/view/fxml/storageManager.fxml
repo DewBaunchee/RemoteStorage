@@ -1,48 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
-<?import javafx.scene.control.ListView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="930.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.vorivoda.matvey.controller.StorageFXController">
    <center>
       <SplitPane dividerPositions="0.29831718510963795, 0.7406935237123916" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="pane">
                <children>
-                  <TreeView layoutX="-30.0" layoutY="21.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TreeView fx:id="storageStructure" layoutX="-30.0" layoutY="21.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <stylesheets>
+                        <URL value="@../style/common.css" />
+                        <URL value="@../style/storage.css" />
+                     </stylesheets>
+                     <styleClass>
+                        <String fx:value="pane" />
+                        <String fx:value="tree-view" />
+                     </styleClass></TreeView>
                </children>
                <stylesheets>
-                  <URL value="@../style/storage.css" />
                   <URL value="@../style/common.css" />
+                  <URL value="@../style/storage.css" />
                </stylesheets>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="pane">
                <children>
-                  <ListView prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ScrollPane fx:id="folderElementsScrollBar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <VBox fx:id="folderElements" prefHeight="0.0" prefWidth="0.0" styleClass="pane" />
+                     </content>
+                  </ScrollPane>
                </children>
                <stylesheets>
-                  <URL value="@../style/storage.css" />
                   <URL value="@../style/common.css" />
+                  <URL value="@../style/storage.css" />
                </stylesheets>
             </AnchorPane>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+            <AnchorPane fx:id="contentPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="pane">
                <stylesheets>
-                  <URL value="@../style/storage.css" />
                   <URL value="@../style/common.css" />
+                  <URL value="@../style/storage.css" />
                </stylesheets></AnchorPane>
         </items>
+         <stylesheets>
+            <URL value="@../style/common.css" />
+            <URL value="@../style/storage.css" />
+         </stylesheets>
+         <styleClass>
+            <String fx:value="pane" />
+            <String fx:value="split-pane" />
+         </styleClass>
       </SplitPane>
    </center>
    <top>
-      <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="32.0" prefWidth="930.0" BorderPane.alignment="CENTER">
+      <HBox maxHeight="32.0" minHeight="32.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="32.0" prefWidth="930.0" styleClass="title-pane" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="32.0" prefWidth="42.0" />
+            <AnchorPane fx:id="closeBtn" prefHeight="32.0" prefWidth="42.0">
+               <styleClass>
+                  <String fx:value="close-btn" />
+                  <String fx:value="btn" />
+               </styleClass></AnchorPane>
+            <HBox fx:id="titleHBox" alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="66.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <ImageView fitHeight="27.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../image/main-icon-box32x32.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets bottom="2.0" left="2.0" right="10.0" top="2.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <MenuBar styleClass="main-menu">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Close" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Edit">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Delete" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" />
+                              <MenuItem mnemonicParsing="false" text="About" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+               </children>
+            </HBox>
          </children>
+         <stylesheets>
+            <URL value="@../style/common.css" />
+            <URL value="@../style/storage.css" />
+         </stylesheets>
       </HBox>
    </top>
+   <stylesheets>
+      <URL value="@../style/common.css" />
+      <URL value="@../style/storage.css" />
+   </stylesheets>
 </BorderPane>

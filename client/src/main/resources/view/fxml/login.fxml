@@ -5,6 +5,7 @@
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -19,7 +20,7 @@
    <center>
       <AnchorPane prefHeight="294.0" prefWidth="283.0">
          <children>
-            <VBox alignment="TOP_CENTER" layoutX="67.0" layoutY="47.0" prefHeight="294.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="TOP_CENTER" layoutX="67.0" layoutY="47.0" prefHeight="294.0" prefWidth="350.0" styleClass="sign-vbox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -148,10 +149,12 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </HBox>
+                  <Label fx:id="errorLabel" prefHeight="17.0" prefWidth="407.0" styleClass="error-label" text="Label" textFill="WHITE">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
                </children>
-               <padding>
-                  <Insets bottom="40.0" left="40.0" right="40.0" top="50.0" />
-               </padding>
             </VBox>
          </children>
       </AnchorPane>
