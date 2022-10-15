@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity webSecurity) {
         webSecurity.ignoring()
-                .antMatchers("/login/**", "/registration/**", "/storage/**"); // TODO remove "/storage/**"
+                .antMatchers("/login/**", "/registration/**");
     }
 
     @Override
@@ -49,18 +49,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling()
                 .and()
                 .authenticationProvider(authenticationProvider)
-            //TODO    .addFilterBefore(authenticationFilter(), AnonymousAuthenticationFilter.class)
+                .addFilterBefore(authenticationFilter(), AnonymousAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/login/**", "/registration/**").permitAll()
-                .antMatchers("/storage/**").permitAll() // TODO .authenticated()
+                .antMatchers("/storage/**").authenticated()
                 .and()
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .logout().disable();
     }
-/*
-TODO
+
     @Bean
     public AuthenticationFilter authenticationFilter() throws Exception {
         AuthenticationFilter filter = new AuthenticationFilter(
@@ -71,7 +70,7 @@ TODO
         filter.setAuthenticationManager(authenticationManager());
         //filter.setAuthenticationSuccessHandler(successHandler());
         return filter;
-    }*/
+    }
 
     @Bean
     public AuthenticationEntryPoint forbiddenEntryPoint() {

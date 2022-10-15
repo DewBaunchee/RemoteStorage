@@ -4,20 +4,26 @@ import by.vorivoda.matvey.ApplicationScene;
 import by.vorivoda.matvey.ClientApplication;
 import by.vorivoda.matvey.controller.util.AlertMessage;
 import by.vorivoda.matvey.model.IRemoteStorageClient;
+import by.vorivoda.matvey.model.RemoteStorageClient;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.io.IOException;
 
@@ -57,11 +63,11 @@ public class LoginFXController extends CommonController {
     private StringProperty usernameProperty;
     private StringProperty passwordProperty;
 
-    @Autowired
     private IRemoteStorageClient storage;
 
     @FXML
     void initialize() {
+        storage = (RemoteStorageClient) ClientApplication.getContext().getBean("StorageClient");
         isPasswordHidden = new SimpleBooleanProperty(true);
 
         usernameProperty = new SimpleStringProperty();
@@ -89,13 +95,13 @@ public class LoginFXController extends CommonController {
             }
             cleanError();
 
-            boolean isSigned = storage.signIn(usernameProperty.get(), passwordProperty.get());
+            boolean isSigned =  storage.signIn(usernameProperty.get().trim(), passwordProperty.get().trim());
             if(isSigned) {
                 try {
                     ClientApplication.switchRoot((Stage) signInBtn.getScene().getWindow(), ApplicationScene.STORAGE_MANAGER);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    AlertMessage.ERROR_WHEN_SWITCHING_SCENES.showAndWait();
+                    alert("Error when switching scenes.", signInBtn.getScene().getWindow());
                 }
             } else {
                 errorOccurred("Wrong username or password.");
@@ -107,12 +113,19 @@ public class LoginFXController extends CommonController {
                 ClientApplication.switchRoot((Stage) signUpBtn.getScene().getWindow(), ApplicationScene.REGISTRATION);
             } catch (IOException e) {
                 e.printStackTrace();
-                AlertMessage.ERROR_WHEN_SWITCHING_SCENES.showAndWait();
+                alert("Error when switching scenes.", signInBtn.getScene().getWindow());
             }
         });
 
-        setErrorLabel(errorLabel);
+        EventHandler<KeyEvent> enterEvent = keyEvent -> {
+            if(keyEvent.getCode() == KeyCode.ENTER) signInBtn.fire();
+        };
 
+        usernameField.setOnKeyPressed(enterEvent);
+        hiddenPasswordField.setOnKeyPressed(enterEvent);
+        visiblePasswordField.setOnKeyPressed(enterEvent);
+
+        setErrorLabel(errorLabel);
         setCloseBtn(closeBtn);
         setWindowGrabber(titleHBox);
     }

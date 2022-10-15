@@ -31,7 +31,7 @@
     -fx-font-size: 18;
 }
 
-.btn:hover {
+.primary-btn:hover, .secondary-btn:hover, .btn:hover {
     -fx-background-color: #FFF;
     -fx-text-fill: #000;
     -fx-cursor: hand;

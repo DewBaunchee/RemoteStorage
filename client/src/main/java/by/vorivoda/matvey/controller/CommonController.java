@@ -1,14 +1,28 @@
 package by.vorivoda.matvey.controller;
 
+import by.vorivoda.matvey.ApplicationScene;
+import by.vorivoda.matvey.ClientApplication;
 import javafx.animation.FadeTransition;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.StringProperty;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import javafx.util.Duration;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.lang.NonNull;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,5 +100,37 @@ public abstract class CommonController {
 
             errorLabel.setVisible(hasErrors);
         });
+    }
+
+    public void showModal(StringProperty answer, ApplicationScene modalScene, Window window) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(ClientApplication.class.getResource(modalScene.getPath()));
+        try {
+            Stage stage = new Stage();
+            stage.initOwner(window);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setScene(new Scene(loader.load()));
+            answer.bind(((FolderNameRequesterController) loader.getController()).nameProperty());
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void alert(String message, Window window) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(ClientApplication.class.getResource(ApplicationScene.INFO_ALERT.getPath()));
+        try {
+            Stage stage = new Stage();
+            stage.initOwner(window);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setScene(new Scene(loader.load()));
+            ((MessageController) loader.getController()).setMessage(message);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

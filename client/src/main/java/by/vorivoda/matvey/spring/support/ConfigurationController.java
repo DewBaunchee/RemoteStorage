@@ -20,7 +20,7 @@ public class ConfigurationController {
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
                 .setConnectTimeout(Duration.ofSeconds(2))
-                .setReadTimeout(Duration.ofSeconds(3))
+                .setReadTimeout(Duration.ofSeconds(30))
                 .build();
     }
 
@@ -51,7 +51,7 @@ public class ConfigurationController {
     }
 
     @Bean
-    public StorageFXController getMainController() {
+    public StorageFXController storageFXController() {
         return (StorageFXController) getMainView().getController();
     }
 

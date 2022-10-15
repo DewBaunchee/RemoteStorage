@@ -66,4 +66,8 @@ public class SecurityToken implements DAO {
         calendar.add(Calendar.MINUTE, GlobalConstants.TOKEN_LIFETIME_IN_MINUTES);
         expiredDate = calendar.getTime();
     }
+
+    public boolean isExpired() {
+        return new Date().getTime() > expiredDate.getTime();
+    }
 }

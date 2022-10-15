@@ -3,34 +3,44 @@ package by.vorivoda.matvey.model;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Map;
 
 @Component
 public interface IRemoteStorageClient {
 
-    Map<String, String> registration(String username, String password);
+    Map<String, String> registration(String username, String password) throws IOException;
 
     boolean signIn(String username, String password);
 
-    String[] folderElements(String path);
+    void open(String path) throws IOException;
 
-    File getFile(String path);
+    void refreshAllPaths() throws IOException;
 
-    Integer sizeOf(String path);
+    BigInteger sizeOf(String path);
 
-    boolean uploadFile(String path, File file);
+    void uploadFile(String path, File file) throws IOException;
 
-    boolean uploadFile(String path, byte[] content);
+    void uploadFile(String path, String content);
 
-    boolean appendFile(String path, File file);
+    void uploadFile(String path, byte[] content);
 
-    boolean appendFile(String path, byte[] content);
+    void appendFile(String path, File file) throws IOException;
 
-    boolean createFolder(String path);
+    void appendFile(String path, String  content);
 
-    boolean move(String src, String dest);
+    void appendFile(String path, byte[] content);
 
-    boolean copy(String src, String dest);
+    void createFolder(String path);
 
-    boolean delete(String path);
+    void move(String src, String dest);
+
+    void copy(String src, String dest);
+
+    void delete(String path);
+
+    StorageStateBindings getState();
+
+    String getStoragePath(String name);
 }

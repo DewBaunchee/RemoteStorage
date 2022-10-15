@@ -25,12 +25,11 @@ public class RegistrationController {
     }
 
     @PostMapping(GlobalConstants.REGISTRATION_PATH)
-    @ResponseBody
     public ResponseEntity<String> addUser(@RequestParam("username") String username,
                                   @RequestParam("password") String password) throws Exception {
 
         logger.info("Registration of new user...");
-        if (userService.loadUserByUsername(username) != null) throw new SuchUserAlreadyExistsException();
+        if (userService.loadUserByUsername(username) != null) throw new SuchUserAlreadyExistsException("Such user already exists.");
         String errorsReport = getRegistrationErrorsReport(username, password);
         if (errorsReport.length() > 0) throw new InvalidRegistrationArgumentsException(errorsReport);
 
@@ -45,11 +44,6 @@ public class RegistrationController {
         if (!username.matches(GlobalConstants.USERNAME_SYMBOLS_REGEX))
             report.append("Username: invalid symbols (need ")
                     .append(GlobalConstants.USERNAME_SYMBOLS_REGEX)
-                    .append(")\n");
-
-        if (!password.matches(GlobalConstants.PASSWORD_SYMBOLS_REGEX))
-            report.append("Password: invalid symbols (need ")
-                    .append(GlobalConstants.PASSWORD_SYMBOLS_REGEX)
                     .append(")\n");
 
         if (username.length() < GlobalConstants.USERNAME_MIN_LENGTH)

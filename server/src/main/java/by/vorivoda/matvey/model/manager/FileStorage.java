@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class FileStorage {
 
-    private static String contextPath;
+    private static String contextPath = "";
     private String root;
     private final Logger logger = LoggerFactory.getLogger(FileStorage.class);
 
@@ -30,11 +30,16 @@ public class FileStorage {
         List<String> answer;
         if (Files.exists(Paths.get(path))) {
             if (Files.isDirectory(Paths.get(path))) {
+                String finalPath = path;
                 String[] content = new File(path).list();
+
                 if (content == null) {
                     throw new IOException("Unknown error during getting a folder content.");
                 } else {
-                    answer = Arrays.asList(Objects.requireNonNull(new File(path).list()));
+                    answer = Arrays.stream(content).map((element) -> {
+                        if(Files.isDirectory(Paths.get(finalPath + "/" + element))) return element + "/";
+                        return element;
+                    }).toList();
                 }
             } else {
                 throw new NotADirectory("Requested path does not point to directory.");
@@ -47,8 +52,25 @@ public class FileStorage {
         return answer;
     }
 
+    public List<String> getAllPaths(String path) throws IOException {
+        logger.info("Getting all paths in storage...");
+        path = getFullPath(path);
+        List<String> answer;
+        if (Files.exists(Paths.get(path))) {
+            if (Files.isDirectory(Paths.get(path))) {
+                 answer = getListOfContent(path, true);
+            } else {
+                throw new NotADirectory("Requested path does not point to directory.");
+            }
+        } else {
+            throw new NoSuchFileException("No such folder.");
+        }
+        logger.info("Getting list of all paths handled.");
+        return answer;
+    }
+
     public byte[] getFile(String path) throws IOException {
-        logger.info("Getting file for " + path + "...");
+        logger.info("Getting file " + path + "...");
         path = getFullPath(path);
 
         byte[] answer;
@@ -91,7 +113,7 @@ public class FileStorage {
             throw new NotAFile("Requested path points to directory.");
         } else {
             createNestedDirectory(Paths.get(path).getParent());
-            Files.write(Paths.get(path), content, StandardOpenOption.APPEND);
+            Files.write(Paths.get(path), content);
         }
 
         logger.info("Writing handled");
@@ -124,7 +146,7 @@ public class FileStorage {
         }
 
         logger.info("Calculated: " + size);
-        return size; // TODO
+        return size;
     }
 
     public void delete(String path) throws IOException {
@@ -182,9 +204,11 @@ public class FileStorage {
     }
 
     private String getFullPath(String canonical) {
-        return canonical.startsWith(root)
+        String absolute = canonical.startsWith(root)
                 ? canonical
                 : root + (canonical.startsWith("/") ? "" : "/") + canonical.replace('\\', '/');
+        logger.debug("Absolute path: " + absolute);
+        return absolute;
     }
 
     private String getCanonicalPath(String full) { // TODO CAN BE ERROR
@@ -260,6 +284,7 @@ public class FileStorage {
     }
 
     public void setRoot(String root) {
+        root = root.startsWith("/") ? root : "/" + root;
         root = (contextPath + GlobalConstants.STORAGES_LOCATION + root)
                 .replace('\\', '/').replace("//", "/");
         if (!Files.exists(Paths.get(root))) {
@@ -269,6 +294,7 @@ public class FileStorage {
                 e.printStackTrace();
             }
         }
+        logger.debug("File storage assigned to: " + Paths.get(root).toAbsolutePath());
         this.root = root;
     }
 }

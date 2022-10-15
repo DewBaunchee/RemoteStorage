@@ -1,7 +1,5 @@
 .title-pane {
     -fx-background-color: #191919;
-    -fx-border-color: #333;
-    -fx-border-width: 0 0 1 0;
 }
 
 .split-pane .split-pane-divider {
@@ -20,6 +18,7 @@
 
 .main-menu .label {
     -fx-text-fill: #FFF;
+    -fx-font-size: 10;
 }
 
 .main-menu .menu {
@@ -62,22 +61,22 @@
     -fx-font-size: 16;
 }
 
+.font-small {
+    -fx-font-size: 12;
+}
+
+.font-medium {
+    -fx-font-size: 14;
+}
+
+.font-large {
+    -fx-font-size: 16;
+}
+
 .folder-element:hover {
     -fx-border-color: #C93636;
     -fx-border-width: 0 0 0 2;
     -fx-cursor: hand;
-}
-
-.tree-view .tree-cell .tree-disclosure-node,
-.tree-view .tree-cell .arrow {
-
-    -fx-min-width: 0;
-    -fx-pref-width: 0;
-    -fx-max-width: 0;
-
-    -fx-min-height: 0;
-    -fx-pref-height: 0;
-    -fx-max-height: 0;
 }
 
 .scroll-bar:horizontal .track,
@@ -139,3 +138,35 @@
     -fx-padding: 0;
     -fx-border-width:0;
 }
+
+.tool-bar {
+    -fx-background-color: #222;
+    -fx-border-color: #444;
+    -fx-border-width: 0 0 2 0;
+    -fx-padding: 0 10;
+}
+
+.path-field {
+    -fx-background-color: #444;
+    -fx-highlight-fill: #C93636;
+}
+
+.icon-btn:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.19);
+    -fx-cursor: hand;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

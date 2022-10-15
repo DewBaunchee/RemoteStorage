@@ -89,12 +89,16 @@ public class UserService implements UserDetailsService, DAOService<User> {
         logger.info("Trying to sign in user [" + username + "]...");
         User user = (User) loadUserByUsername(username);
         if (user == null) throw new UsernameNotFoundException("No such user (" + username + ")");
-        if (user.getToken() != null) {
-            logger.info("Such user already has a token.");
-            return user.getToken();
-        }
 
         if (passwordEncoder.matches(password, user.getPassword())) {
+            if (user.getToken() != null) {
+                if(user.getToken().isExpired()) {
+                    tokenRepository.delete(user.getToken());
+                } else {
+                    logger.info("Such user already has a token.");
+                    return user.getToken();
+                }
+            }
             String tokenValue;
             do {
                 tokenValue = UUID.randomUUID().toString();
@@ -105,6 +109,7 @@ public class UserService implements UserDetailsService, DAOService<User> {
             tokenRepository.save(token);
             userRepository.save(user);
             logger.info("Token generated: " + tokenValue + "...");
+            return token;
         }
 
         logger.warn("Passwords doesn't match.");

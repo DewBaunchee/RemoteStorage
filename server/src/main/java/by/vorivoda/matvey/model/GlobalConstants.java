@@ -1,12 +1,13 @@
 package by.vorivoda.matvey.model;
 
+import org.springframework.http.MediaType;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class GlobalConstants {
     // Security
     public static final String USERNAME_SYMBOLS_REGEX = "[A-Za-z0-9_]*";
-    public static final String PASSWORD_SYMBOLS_REGEX = "[A-Za-z0-9_]*";
     public static final Integer USERNAME_MIN_LENGTH = 4;
     public static final Integer USERNAME_MAX_LENGTH = 32;
     public static final Integer PASSWORD_MIN_LENGTH = 8;
@@ -23,26 +24,26 @@ public class GlobalConstants {
 
     // WEB
     public static final Map<String, String> CONTENT_TYPES = new HashMap<>(){{
-        put("txt", "text/plain");
+        put("txt", MediaType.TEXT_PLAIN_VALUE);
         put("css", "text/css");
-        put("html", "text/html");
+        put("html", MediaType.TEXT_HTML_VALUE);
         put("js", "text/javascript");
         put("ts", "text/javascript");
         put("php", "text/php");
-        put("xml", "text/xml");
+        put("xml", MediaType.TEXT_XML_VALUE);
 
         put("ogg", "video/ogg");
         put("mp4", "video/mp4");
 
-        put("png", "image/png");
-        put("jpeg", "image/jpeg");
-        put("gif", "image/gif");
+        put("png", MediaType.IMAGE_PNG_VALUE);
+        put("jpeg", MediaType.IMAGE_JPEG_VALUE);
+        put("gif", MediaType.IMAGE_GIF_VALUE);
 
         put("mp3", "audio/mpeg");
 
         put("zip", "application/zip");
-        put("pdf", "application/pdf");
+        put("pdf", MediaType.APPLICATION_PDF_VALUE);
     }};
 
-    public static final String DEFAULT_CONTENT_TYPE = "text/plain";
+    public static final String DEFAULT_CONTENT_TYPE = MediaType.TEXT_PLAIN_VALUE;
 }

@@ -4,20 +4,30 @@ import by.vorivoda.matvey.ApplicationScene;
 import by.vorivoda.matvey.ClientApplication;
 import by.vorivoda.matvey.controller.util.AlertMessage;
 import by.vorivoda.matvey.model.IRemoteStorageClient;
-import javafx.beans.property.*;
+import by.vorivoda.matvey.model.RemoteStorageClient;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class RegistrationFXController extends CommonController {
 
@@ -62,11 +72,11 @@ public class RegistrationFXController extends CommonController {
     private StringProperty confirmationProperty;
     private BooleanProperty isPasswordHidden;
 
-    @Autowired
     private IRemoteStorageClient storage;
 
     @FXML
     void initialize() {
+        storage = (RemoteStorageClient) ClientApplication.getContext().getBean("StorageClient");
         isPasswordHidden = new SimpleBooleanProperty(true);
 
         usernameProperty = new SimpleStringProperty();
@@ -102,24 +112,38 @@ public class RegistrationFXController extends CommonController {
                 errorOccurred("Fill the fields!");
                 return;
             }
-            if(!passwordProperty.get().equals(confirmationProperty.get())) {
+            if (!passwordProperty.get().equals(confirmationProperty.get())) {
                 errorOccurred("Passwords are not equal!");
                 return;
             }
             cleanError();
 
-            Map<String, String> errors = storage.registration(usernameField.getText(), hiddenPasswordField.getText());
+            String username = usernameField.getText().trim();
+            String password = hiddenPasswordField.getText().trim();
+            Map<String, String> errors;
+            try {
+                errors = storage.registration(username, password);
+            } catch (IOException e) {
+                alert(e.getMessage(), signUpBtn.getScene().getWindow());
+                return;
+            }
+            // Dewey
+            // password
             if (errors.size() == 0) {
                 try {
-                    ClientApplication.switchRoot((Stage) signUpBtn.getScene().getWindow(), ApplicationScene.STORAGE_MANAGER);
+                    if (storage.signIn(username, password)) {
+                        ClientApplication.switchRoot((Stage) signUpBtn.getScene().getWindow(), ApplicationScene.STORAGE_MANAGER);
+                    } else {
+                        ClientApplication.switchRoot((Stage) signUpBtn.getScene().getWindow(), ApplicationScene.LOGIN);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    AlertMessage.ERROR_WHEN_SWITCHING_SCENES.showAndWait();
+                    alert("Error when switching scenes.", signInBtn.getScene().getWindow());
                 }
             } else {
                 List<TextField> wrongFields = new ArrayList<>();
-                if(errors.get("username") != null) wrongFields.add(usernameField);
-                if(errors.get("password") != null) wrongFields.add(hiddenPasswordField);
+                if (errors.get("username") != null) wrongFields.add(usernameField);
+                if (errors.get("password") != null) wrongFields.add(hiddenPasswordField);
                 errorOccurred(errors.get("summary"), wrongFields);
             }
         });
@@ -129,33 +153,45 @@ public class RegistrationFXController extends CommonController {
                 ClientApplication.switchRoot((Stage) signInBtn.getScene().getWindow(), ApplicationScene.LOGIN);
             } catch (IOException e) {
                 e.printStackTrace();
-                AlertMessage.ERROR_WHEN_SWITCHING_SCENES.showAndWait();
+                alert("Error when switching scenes.", signInBtn.getScene().getWindow());
             }
         });
+
+        EventHandler<KeyEvent> enterEvent = keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) signInBtn.fire();
+        };
+
+        usernameField.setOnKeyPressed(enterEvent);
+        hiddenPasswordField.setOnKeyPressed(enterEvent);
+        visiblePasswordField.setOnKeyPressed(enterEvent);
+        hiddenConfirmationField.setOnKeyPressed(enterEvent);
+        visibleConfirmationField.setOnKeyPressed(enterEvent);
+
 
         setConfirmationCheck(hiddenConfirmationField);
         setConfirmationCheck(visibleConfirmationField);
 
         setErrorLabel(errorLabel);
-
         setWindowGrabber(titleHBox);
         setCloseBtn(closeBtn);
     }
 
     private void setConfirmationCheck(TextField target) {
-        target.textProperty().addListener((observableValue, oldValue, newValue) -> {
+        confirmationProperty.addListener((observableValue, oldValue, newValue) -> {
             if (passwordProperty.get().equals(newValue)) {
                 target.getStyleClass().remove("wrong-field");
             } else {
-                target.getStyleClass().add("wrong-field");
+                if (!target.getStyleClass().contains("wrong-field"))
+                    target.getStyleClass().add("wrong-field");
             }
         });
 
         passwordProperty.addListener((observableValue, oldValue, newValue) -> {
-            if (target.getText().equals(newValue)) {
+            if (confirmationProperty.get().equals(newValue)) {
                 target.getStyleClass().remove("wrong-field");
             } else {
-                target.getStyleClass().add("wrong-field");
+                if (!target.getStyleClass().contains("wrong-field"))
+                    target.getStyleClass().add("wrong-field");
             }
         });
     }

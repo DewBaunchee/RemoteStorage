@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
             InvalidRegistrationArgumentsException.class})
     public ResponseEntity<String> handleAuthorizationExceptions(Exception e) {
         logError(e);
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(value = {
